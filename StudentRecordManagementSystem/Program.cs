@@ -1,7 +1,22 @@
+using StudentRecordManagementSystem.Models;
+using System.Configuration;
+
 namespace StudentRecordManagementSystem
 {
     public class Program
     {
+        public Program(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllersWithViews();
+           // string conStr = this.Configuration.GetConnectionString("cName");
+            //services.AddDbContext<>(options => options.UseSqlServer(Configuartion.GetConnectionString("DatabaseConnection")));
+        }
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);

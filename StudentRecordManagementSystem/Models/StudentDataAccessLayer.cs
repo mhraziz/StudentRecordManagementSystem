@@ -1,17 +1,27 @@
-﻿using StudentRecordManagementSystem.Utility;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
 
 namespace StudentRecordManagementSystem.Models
 {
     public class StudentDataAccessLayer
     {
-        string connectionString = ConnectionString.CName;
+        SqlConnection _connection = null;
+        SqlCommand _command = null;
+
+
+        public static IConfiguration Configuration { get; set; }
+
+        private string GetConnectionString()
+        {
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            Configuration = builder.Build();
+            return Configuration.GetConnectionString("cName");
+        }
 
         public IEnumerable<Student> GetAllStudent()
         {
             List<Student> lstStudent = new List<Student>();
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("spGetAllStudent", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -36,7 +46,7 @@ namespace StudentRecordManagementSystem.Models
         }
         public void AddStudent(Student student)
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("spAddStudent", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -54,7 +64,7 @@ namespace StudentRecordManagementSystem.Models
 
         public void UpdateStudent(Student student)
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("spUpdateStudent", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -75,7 +85,7 @@ namespace StudentRecordManagementSystem.Models
         {
             Student student = new Student();
 
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(GetConnectionString()))
             {
                 string sqlQuery = "SELECT * FROM Student WHERE Id= " + id;
                 SqlCommand cmd = new SqlCommand(sqlQuery, con);
@@ -97,7 +107,7 @@ namespace StudentRecordManagementSystem.Models
 
         public void DeleteStudent(int? id)
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("spDeleteStudent", con);
                 cmd.CommandType = CommandType.StoredProcedure;
