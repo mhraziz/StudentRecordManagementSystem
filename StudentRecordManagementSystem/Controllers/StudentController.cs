@@ -1,27 +1,28 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using StudentRecordManagementSystem.Models;
 
 namespace StudentRecordManagementSystem.Controllers
 {
     public class StudentController : Controller
     {
-        StudentDataAccessLayer studentDataAccessLayer = null;
-        public StudentController()
+        private readonly IStudentDataAccessLayer _studentDataAccessLayer;
+
+        public StudentController(IStudentDataAccessLayer studentDataAccessLayer)
         {
-            studentDataAccessLayer = new StudentDataAccessLayer();
+            _studentDataAccessLayer = studentDataAccessLayer;
         }
+
         // GET: StudentController
         public ActionResult Index()
         {
-            IEnumerable<Student> students = studentDataAccessLayer.GetAllStudent();
+            IEnumerable<Student> students = _studentDataAccessLayer.GetAllStudent();
             return View(students);
         }
 
         // GET: StudentController/Details/5
         public ActionResult Details(int id)
         {
-            Student student = studentDataAccessLayer.GetStudentData(id);
+            Student student = _studentDataAccessLayer.GetStudentData(id);
             return View(student);
         }
 
@@ -38,7 +39,7 @@ namespace StudentRecordManagementSystem.Controllers
         {
             try
             {
-                studentDataAccessLayer.AddStudent(student);
+                _studentDataAccessLayer.AddStudent(student);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -50,7 +51,7 @@ namespace StudentRecordManagementSystem.Controllers
         // GET: StudentController/Edit/5
         public ActionResult Edit(int id)
         {
-            Student student = studentDataAccessLayer.GetStudentData(id);
+            Student student = _studentDataAccessLayer.GetStudentData(id);
             return View(student);
         }
 
@@ -61,7 +62,7 @@ namespace StudentRecordManagementSystem.Controllers
         {
             try
             {
-                studentDataAccessLayer.UpdateStudent(student);
+                _studentDataAccessLayer.UpdateStudent(student);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -73,7 +74,7 @@ namespace StudentRecordManagementSystem.Controllers
         // GET: StudentController/Delete/5
         public ActionResult Delete(int id)
         {
-            Student student = studentDataAccessLayer.GetStudentData(id);
+            Student student = _studentDataAccessLayer.GetStudentData(id);
             return View(student);
         }
 
@@ -84,7 +85,7 @@ namespace StudentRecordManagementSystem.Controllers
         {
             try
             {
-                studentDataAccessLayer.DeleteStudent(student.Id);
+                _studentDataAccessLayer.DeleteStudent(student.Id);
                 return RedirectToAction(nameof(Index));
             }
             catch

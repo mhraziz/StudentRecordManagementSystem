@@ -1,3 +1,5 @@
+using StudentRecordManagementSystem.Models;
+
 namespace StudentRecordManagementSystem
 {
     public class Program
@@ -8,6 +10,7 @@ namespace StudentRecordManagementSystem
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSingleton<IStudentDataAccessLayer, StudentDataAccessLayer>();
 
             var app = builder.Build();
 
