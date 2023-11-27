@@ -1,5 +1,4 @@
 using StudentRecordManagementSystem.Models;
-using System.Configuration;
 
 namespace StudentRecordManagementSystem
 {
@@ -23,6 +22,7 @@ namespace StudentRecordManagementSystem
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSingleton<IStudentDataAccessLayer, StudentDataAccessLayer>();
 
             var app = builder.Build();
 
